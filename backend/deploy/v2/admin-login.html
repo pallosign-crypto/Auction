@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Tanzania Real Estate Auctions</title>
+    <meta name="description" content="Admin portal login for Tanzania Real Estate Auctions management system.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'savanna-gold': '#D4A574',
+                        'ocean-teal': '#2C7A7B',
+                        'basalt-black': '#1A202C',
+                        'sundown-orange': '#DD6B20',
+                        'safari-beige': '#F7FAFC',
+                        'mountain-gray': '#4A5568'
+                    },
+                    fontFamily: {
+                        'crimson': ['Crimson Pro', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .admin-gradient {
+            background: linear-gradient(135deg, #2C7A7B 0%, #D4A574 50%, #DD6B20 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .admin-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .admin-input {
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-input:focus {
+            border-color: #D4A574;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+    </style>
+</head>
+
+<body class="admin-gradient min-h-screen flex items-center justify-center p-4">
+    <div class="admin-card rounded-2xl p-8 w-full max-w-md">
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-savanna-gold to-sundown-orange rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-crimson font-bold text-basalt-black mb-2">Admin Portal</h1>
+            <p class="text-mountain-gray">Tanzania Real Estate Auctions</p>
+        </div>
+        
+        <form id="adminLoginForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-semibold text-basalt-black mb-2">Admin Username</label>
+                <input 
+                    type="text" 
+                    id="adminUsername" 
+                    class="admin-input w-full p-3 rounded-lg focus:outline-none"
+                    placeholder="Enter admin username"
+                    required
+                >
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-basalt-black mb-2">Password</label>
+                <input 
+                    type="password" 
+                    id="adminPassword" 
+                    class="admin-input w-full p-3 rounded-lg focus:outline-none"
+                    placeholder="Enter password"
+                    required
+                >
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <label class="flex items-center">
+                    <input type="checkbox" class="mr-2">
+                    <span class="text-sm text-mountain-gray">Remember me</span>
+                </label>
+                <a href="#" class="text-sm text-ocean-teal hover:text-savanna-gold">Forgot password?</a>
+            </div>
+            
+            <button 
+                type="submit" 
+                class="w-full bg-savanna-gold text-white py-3 rounded-lg font-semibold hover:bg-sundown-orange transition-colors duration-300"
+            >
+                Sign In to Admin Portal
+            </button>
+        </form>
+        
+        <div class="mt-6 pt-6 border-t border-gray-200">
+            <div class="text-center">
+                <p class="text-sm text-mountain-gray mb-2">Need access to the admin portal?</p>
+                <a href="mailto:admin@tanzaniaauctions.com" class="text-sm text-ocean-teal hover:text-savanna-gold">
+                    Contact System Administrator
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            // Demo credentials for testing
+            const demoCredentials = {
+                admin: 'admin123',
+                manager: 'manager123',
+                superadmin: 'superadmin123'
+            };
+            
+            if (demoCredentials[username] && demoCredentials[username] === password) {
+                // Store admin session
+                localStorage.setItem('adminSession', JSON.stringify({
+                    username: username,
+                    role: username === 'superadmin' ? 'superadmin' : 'admin',
+                    loginTime: new Date().toISOString()
+                }));
+                
+                // Redirect to admin dashboard
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                alert('Invalid username or password. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

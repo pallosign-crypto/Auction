@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanzania Properties - Advanced Search & Listings</title>
+    <meta name="description" content="Explore comprehensive property listings across Tanzania. Advanced search, interactive map, and detailed property information for informed investment decisions.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Currency Utilities -->
+    <script src="currency-utils.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'savanna-gold': '#D4A574',
+                        'ocean-teal': '#2C7A7B',
+                        'basalt-black': '#1A202C',
+                        'sundown-orange': '#DD6B20',
+                        'safari-beige': '#F7FAFC',
+                        'mountain-gray': '#4A5568'
+                    },
+                    fontFamily: {
+                        'crimson': ['Crimson Pro', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .property-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .filter-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .price-range-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: linear-gradient(to right, #2C7A7B, #D4A574);
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .price-range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #D4A574;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        
+        .pattern-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4A574' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .map-container {
+            height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-safari-beige text-basalt-black font-inter pattern-bg">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-morphism">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="index.html" class="text-2xl font-crimson font-bold text-gradient">Tanzania Auctions</a>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-basalt-black hover:text-savanna-gold transition-colors duration-300 font-medium">Home</a>
+                        <a href="properties.html" class="text-savanna-gold font-semibold">Properties</a>
+                        <a href="auctions.html" class="text-basalt-black hover:text-savanna-gold transition-colors duration-300 font-medium">Live Auctions</a>
+                        <a href="about.html" class="text-basalt-black hover:text-savanna-gold transition-colors duration-300 font-medium">About</a>
+                        <a href="login.html" class="bg-savanna-gold text-white px-6 py-2 rounded-lg hover:bg-sundown-orange transition-colors duration-300 font-semibold">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="pt-24 pb-12 bg-gradient-to-br from-ocean-teal to-savanna-gold">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-white">
+                <h1 class="text-4xl md:text-6xl font-playfair font-bold mb-4">Property Listings</h1>
+                <p class="text-xl md:text-2xl max-w-3xl mx-auto">Discover exceptional real estate opportunities across Tanzania's most sought-after locations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search and Filter Section -->
+    <section class="py-8 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="filter-card rounded-xl p-6 shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Location Filter -->
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Location</label>
+                        <select id="locationFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-savanna-gold focus:border-transparent">
+                            <option value="">All Locations</option>
+                            <option value="dar-es-salaam">Dar es Salaam</option>
+                            <option value="arusha">Arusha</option>
+                            <option value="mwanza">Mwanza</option>
+                            <option value="zanzibar">Zanzibar</option>
+                            <option value="serengeti">Serengeti</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Property Type Filter -->
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Property Type</label>
+                        <select id="propertyTypeFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-savanna-gold focus:border-transparent">
+                            <option value="">All Types</option>
+                            <option value="villa">Luxury Villa</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="safari-lodge">Safari Lodge</option>
+                            <option value="commercial">Commercial</option>
+                            <option value="land">Land Plot</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Price Range -->
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Price Range</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="range" id="priceRange" class="price-range-slider flex-1" min="0" max="1000000" value="500000" step="10000">
+                            <span id="priceDisplay" class="text-sm font-semibold text-savanna-gold min-w-[80px]">$500K</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Auction Status -->
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Auction Status</label>
+                        <select id="auctionStatusFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-savanna-gold focus:border-transparent">
+                            <option value="">All Status</option>
+                            <option value="live">Live Now</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="completed">Recently Sold</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-4 mt-6">
+                    <button id="searchBtn" class="bg-savanna-gold text-white px-6 py-3 rounded-lg font-semibold hover:bg-sundown-orange transition-colors duration-300">
+                        Search Properties
+                    </button>
+                    <button id="clearFilters" class="bg-gray-200 text-basalt-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors duration-300">
+                        Clear Filters
+                    </button>
+                    <div class="flex items-center ml-auto">
+                        <span class="text-sm text-mountain-gray mr-2">Sort by:</span>
+                        <select id="sortBy" class="p-2 border border-gray-300 rounded-lg text-sm">
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="time-remaining">Time Remaining</option>
+                            <option value="newest">Newest Listed</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="py-8 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <h2 class="text-2xl font-crimson font-bold text-basalt-black mb-2">Property Locations</h2>
+                <p class="text-mountain-gray">Explore properties on the interactive map</p>
+            </div>
+            <div id="propertyMap" class="map-container"></div>
+        </div>
+    </section>
+
+    <!-- Properties Grid -->
+    <section class="py-12 bg-safari-beige">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-crimson font-bold text-basalt-black">Available Properties</h2>
+                    <p class="text-mountain-gray mt-2"><span id="propertyCount">24</span> properties found</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="gridView" class="p-2 bg-savanna-gold text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                        </svg>
+                    </button>
+                    <button id="listView" class="p-2 bg-gray-200 text-basalt-black rounded-lg">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="propertiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Property Card 1 -->
+                <div class="property-card bg-white rounded-xl shadow-lg overflow-hidden" data-location="dar-es-salaam" data-type="villa" data-price="285000" data-status="live">
+                    <div class="relative">
+                        <img src="https://kimi-web-img.moonshot.cn/img/images.trvl-media.com/71de9658d8d562850bb8e0cf587c025d49a01c30.jpg" alt="Oceanfront Luxury Villa" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-sundown-orange text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            LIVE
+                        </div>
+                        <div class="absolute top-4 right-4 bg-white bg-opacity-90 text-basalt-black px-2 py-1 rounded-lg text-xs font-semibold">
+                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Masaki, Dar es Salaam
+                        </div>
+                        <div class="absolute bottom-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded-lg text-sm">
+                            <span class="countdown-timer font-bold">02:15:30</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-2">Oceanfront Luxury Villa</h3>
+                        <p class="text-mountain-gray mb-4">Stunning beachfront property with panoramic ocean views and modern amenities.</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-2xl font-bold text-savanna-gold">₦ 950,000,000</span>
+                            <span class="text-sm text-mountain-gray">Current Bid</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mb-4 text-sm text-mountain-gray">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                </svg>
+                                4 Beds
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0zM8.828 5.172a4 4 0 00-5.656 0l-.707.707a1 1 0 001.414 1.414l.707-.707a2 2 0 012.828 0l.707.707a1 1 0 001.414-1.414l-.707-.707z" clip-rule="evenodd"></path>
+                                </svg>
+                                3 Baths
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path>
+                                    <path fill-rule="evenodd" d="M3 8a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                320 sqm
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm text-sundown-orange font-semibold">12 bids • 15 watchers</span>
+                            <button class="text-ocean-teal hover:text-savanna-gold transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <button class="w-full bg-ocean-teal text-white py-3 rounded-lg font-semibold hover:bg-savanna-gold transition-colors duration-300">
+                            View Details & Bid
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Property Card 2 -->
+                <div class="property-card bg-white rounded-xl shadow-lg overflow-hidden" data-location="serengeti" data-type="safari-lodge" data-price="450000" data-status="live">
+                    <div class="relative">
+                        <img src="https://kimi-web-img.moonshot.cn/img/www.serengeti.com/318642464eb8a6591dc3b2dbceaeb862f26bd4cd.jpg" alt="Eco Safari Lodge" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-sundown-orange text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            LIVE
+                        </div>
+                        <div class="absolute top-4 right-4 bg-white bg-opacity-90 text-basalt-black px-2 py-1 rounded-lg text-xs font-semibold">
+                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Serengeti National Park
+                        </div>
+                        <div class="absolute bottom-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded-lg text-sm">
+                            <span class="countdown-timer font-bold">05:42:18</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-2">Eco Safari Lodge</h3>
+                        <p class="text-mountain-gray mb-4">Premium safari lodge with 12 luxury suites and exceptional wildlife viewing.</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-2xl font-bold text-savanna-gold">₦ 1,800,000,000</span>
+                            <span class="text-sm text-mountain-gray">Current Bid</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mb-4 text-sm text-mountain-gray">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                </svg>
+                                12 Suites
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M5 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path>
+                                    <path fill-rule="evenodd" d="M3 8a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                500 sqm
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0zM8.828 5.172a4 4 0 00-5.656 0l-.707.707a1 1 0 001.414 1.414l.707-.707a2 2 0 012.828 0l.707.707a1 1 0 001.414-1.414l-.707-.707z" clip-rule="evenodd"></path>
+                                </svg>
+                                Pool
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm text-sundown-orange font-semibold">8 bids • 22 watchers</span>
+                            <button class="text-ocean-teal hover:text-savanna-gold transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <button class="w-full bg-ocean-teal text-white py-3 rounded-lg font-semibold hover:bg-savanna-gold transition-colors duration-300">
+                            View Details & Bid
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Property Card 3 -->
+                <div class="property-card bg-white rounded-xl shadow-lg overflow-hidden" data-location="dar-es-salaam" data-type="apartment" data-price="180000" data-status="live">
+                    <div class="relative">
+                        <img src="https://kimi-web-img.moonshot.cn/img/i.ytimg.com/1bfb13b8eeacc8618f57467169fea7bf5592da0a.jpg" alt="Modern Apartment Complex" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-sundown-orange text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            LIVE
+                        </div>
+                        <div class="absolute top-4 right-4 bg-white bg-opacity-90 text-basalt-black px-2 py-1 rounded-lg text-xs font-semibold">
+                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Upanga, Dar es Salaam
+                        </div>
+                        <div class="absolute bottom-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded-lg text-sm">
+                            <span class="countdown-timer font-bold">01:28:45</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-2">Modern Apartment Complex</h3>
+                        <p class="text-mountain-gray mb-4">Contemporary apartment in prime location with city views and premium amenities.</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-2xl font-bold text-savanna-gold">₦ 720,000,000</span>
+                            <span class="text-sm text-mountain-gray">Current Bid</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mb-4 text-sm text-mountain-gray">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                </svg>
+                                3 Beds
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0zM8.828 5.172a4 4 0 00-5.656 0l-.707.707a1 1 0 001.414 1.414l.707-.707a2 2 0 012.828 0l.707.707a1 1 0 001.414-1.414l-.707-.707z" clip-rule="evenodd"></path>
+                                </svg>
+                                2 Baths
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M5 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path>
+                                    <path fill-rule="evenodd" d="M3 8a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                150 sqm
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm text-sundown-orange font-semibold">15 bids • 18 watchers</span>
+                            <button class="text-ocean-teal hover:text-savanna-gold transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <button class="w-full bg-ocean-teal text-white py-3 rounded-lg font-semibold hover:bg-savanna-gold transition-colors duration-300">
+                            View Details & Bid
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Property Card 4 -->
+                <div class="property-card bg-white rounded-xl shadow-lg overflow-hidden" data-location="zanzibar" data-type="villa" data-price="320000" data-status="upcoming">
+                    <div class="relative">
+                        <img src="https://kimi-web-img.moonshot.cn/img/my-beach.com/b16e89283f3f30c308bf3e54a31c8effcadca667.jpg" alt="Zanzibar Beach Villa" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-ocean-teal text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            UPCOMING
+                        </div>
+                        <div class="absolute top-4 right-4 bg-white bg-opacity-90 text-basalt-black px-2 py-1 rounded-lg text-xs font-semibold">
+                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Nungwi, Zanzibar
+                        </div>
+                        <div class="absolute bottom-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded-lg text-sm">
+                            <span class="countdown-timer font-bold">Starts in 3 days</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-2">Beachfront Villa</h3>
+                        <p class="text-mountain-gray mb-4">Luxurious beach villa with private access to pristine white sand beaches.</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-2xl font-bold text-savanna-gold">₦ 1,200,000,000</span>
+                            <span class="text-sm text-mountain-gray">Starting Bid</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mb-4 text-sm text-mountain-gray">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                </svg>
+                                5 Beds
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0zM8.828 5.172a4 4 0 00-5.656 0l-.707.707a1 1 0 001.414 1.414l.707-.707a2 2 0 012.828 0l.707.707a1 1 0 001.414-1.414l-.707-.707z" clip-rule="evenodd"></path>
+                                </svg>
+                                4 Baths
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M5 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path>
+                                    <path fill-rule="evenodd" d="M3 8a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                280 sqm
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm text-ocean-teal font-semibold">0 bids • 8 watchers</span>
+                            <button class="text-ocean-teal hover:text-savanna-gold transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <button class="w-full bg-gray-400 text-white py-3 rounded-lg font-semibold cursor-not-allowed">
+                            Auction Starts Soon
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Additional properties would continue here... -->
+                <!-- Property Cards 5-24 would follow the same pattern with different data -->
+            </div>
+            
+            <!-- Load More Button -->
+            <div class="text-center mt-12">
+                <button id="loadMore" class="bg-savanna-gold text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-sundown-orange transition-all duration-300 transform hover:scale-105">
+                    Load More Properties
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-basalt-black text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-crimson font-bold text-savanna-gold mb-4">Tanzania Auctions</h3>
+                    <p class="text-gray-300 mb-4">Premium real estate auction platform connecting investors with exceptional Tanzanian properties.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="properties.html" class="text-gray-300 hover:text-savanna-gold transition-colors">Properties</a></li>
+                        <li><a href="auctions.html" class="text-gray-300 hover:text-savanna-gold transition-colors">Live Auctions</a></li>
+                        <li><a href="about.html" class="text-gray-300 hover:text-savanna-gold transition-colors">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Property Types</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-300">Luxury Villas</li>
+                        <li class="text-gray-300">Safari Lodges</li>
+                        <li class="text-gray-300">Apartments</li>
+                        <li class="text-gray-300">Commercial</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>Dar es Salaam, Tanzania</li>
+                        <li>+255 22 292 0000</li>
+                        <li>info@tanzaniaauctions.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Tanzania Real Estate Auctions. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

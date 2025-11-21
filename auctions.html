@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Auctions - Tanzania Real Estate</title>
+    <meta name="description" content="Participate in live real estate auctions across Tanzania. Real-time bidding, professional auction services, and transparent property transactions.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
+    <!-- Currency Utilities -->
+    <script src="currency-utils.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'savanna-gold': '#D4A574',
+                        'ocean-teal': '#2C7A7B',
+                        'basalt-black': '#1A202C',
+                        'sundown-orange': '#DD6B20',
+                        'safari-beige': '#F7FAFC',
+                        'mountain-gray': '#4A5568'
+                    },
+                    fontFamily: {
+                        'crimson': ['Crimson Pro', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .auction-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .auction-card:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .countdown-timer {
+            background: linear-gradient(45deg, #DD6B20, #D4A574);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+        
+        .bid-button {
+            background: linear-gradient(135deg, #2C7A7B, #D4A574);
+            transition: all 0.3s ease;
+        }
+        
+        .bid-button:hover {
+            background: linear-gradient(135deg, #D4A574, #DD6B20);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .bid-input {
+            border: 2px solid #2C7A7B;
+            transition: all 0.3s ease;
+        }
+        
+        .bid-input:focus {
+            border-color: #D4A574;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+        
+        .pattern-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4A574' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .auction-status-live {
+            background: linear-gradient(135deg, #DD6B20, #D4A574);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .bid-history-item {
+            background: rgba(44, 122, 123, 0.05);
+            border-left: 3px solid #2C7A7B;
+        }
+        
+        .auto-bid-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: linear-gradient(to right, #2C7A7B, #D4A574);
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .auto-bid-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #D4A574;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+
+<body class="bg-safari-beige text-basalt-black font-inter pattern-bg">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-morphism">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="index.html" class="text-2xl font-crimson font-bold text-gradient">Tanzania Auctions</a>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-basalt-black hover:text-savanna-gold transition-colors duration-300 font-medium">Home</a>
+                        <a href="properties.html" class="text-basalt-black hover:text-savanna-gold transition-colors duration-300 font-medium">Properties</a>
+                        <a href="auctions.html" class="text-savanna-gold font-semibold">Live Auctions</a>
+                        <a href="about.html" class="text-basalt-black hover:text-savanna-gold transition-colors duration-300 font-medium">About</a>
+                        <a href="login.html" class="bg-savanna-gold text-white px-6 py-2 rounded-lg hover:bg-sundown-orange transition-colors duration-300 font-semibold">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="pt-24 pb-12 bg-gradient-to-br from-sundown-orange to-savanna-gold">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-white">
+                <h1 class="text-4xl md:text-6xl font-playfair font-bold mb-4">Live Auctions</h1>
+                <p class="text-xl md:text-2xl max-w-3xl mx-auto">Participate in real-time bidding for premium Tanzanian real estate opportunities.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auction Dashboard -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Active Auctions -->
+                <div class="lg:col-span-2">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-3xl font-crimson font-bold text-basalt-black">Active Auctions</h2>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-sundown-orange rounded-full mr-2 animate-pulse"></div>
+                                <span class="text-sm font-semibold text-mountain-gray">3 Live Now</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-ocean-teal rounded-full mr-2"></div>
+                                <span class="text-sm font-semibold text-mountain-gray">5 Upcoming</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Live Auction Cards -->
+                    <div class="space-y-8">
+                        <!-- Auction 1 -->
+                        <div class="auction-card bg-white rounded-xl shadow-lg overflow-hidden border-2 border-sundown-orange">
+                            <div class="relative">
+                                <img src="https://kimi-web-img.moonshot.cn/img/images.trvl-media.com/71de9658d8d562850bb8e0cf587c025d49a01c30.jpg" alt="Oceanfront Luxury Villa" class="w-full h-80 object-cover">
+                                <div class="absolute top-4 left-4 auction-status-live text-white px-4 py-2 rounded-full text-sm font-bold">
+                                    🔴 LIVE AUCTION
+                                </div>
+                                <div class="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-4 py-2 rounded-lg">
+                                    <div class="text-xs opacity-75">Time Remaining</div>
+                                    <div class="countdown-timer text-lg font-bold">02:15:30</div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-2xl font-crimson font-bold text-basalt-black mb-2">Oceanfront Luxury Villa</h3>
+                                        <p class="text-mountain-gray flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Masaki, Dar es Salaam
+                                        </p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm text-mountain-gray mb-1">Current Bid</div>
+                                        <div class="text-3xl font-bold text-savanna-gold">₦ 950,000,000</div>
+                                        <div class="text-sm text-sundown-orange">12 bids • 15 watchers</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-4 gap-4 mb-6 text-sm">
+                                    <div class="text-center">
+                                        <div class="font-semibold text-basalt-black">4</div>
+                                        <div class="text-mountain-gray">Bedrooms</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold text-basalt-black">3</div>
+                                        <div class="text-mountain-gray">Bathrooms</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold text-basalt-black">320</div>
+                                        <div class="text-mountain-gray">Sq Meters</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold text-basalt-black">Ocean</div>
+                                        <div class="text-mountain-gray">View</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Bidding Interface -->
+                                <div class="bg-safari-beige rounded-lg p-4 mb-4">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <span class="font-semibold text-basalt-black">Place Your Bid</span>
+                                        <span class="text-sm text-mountain-gray">Min bid: ₦ 951,000,000</span>
+                                    </div>
+                                    <div class="flex space-x-4">
+                                        <input type="number" class="bid-input flex-1 p-3 rounded-lg text-lg font-semibold" placeholder="₦ 951,000,000" min="951000000" step="1000000">
+                                        <button class="bid-button text-white px-8 py-3 rounded-lg font-semibold">
+                                            Place Bid
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Auto-bid Setup -->
+                                <div class="bg-white border border-gray-200 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <span class="font-semibold text-basalt-black">Auto-Bid Setup</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-savanna-gold"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <span class="text-sm text-mountain-gray">Max bid:</span>
+                                        <input type="range" class="auto-bid-slider flex-1" min="286000" max="350000" value="300000" step="1000">
+                                        <span class="text-sm font-semibold text-savanna-gold">$300,000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Auction 2 -->
+                        <div class="auction-card bg-white rounded-xl shadow-lg overflow-hidden">
+                            <div class="relative">
+                                <img src="https://kimi-web-img.moonshot.cn/img/www.serengeti.com/318642464eb8a6591dc3b2dbceaeb862f26bd4cd.jpg" alt="Eco Safari Lodge" class="w-full h-80 object-cover">
+                                <div class="absolute top-4 left-4 auction-status-live text-white px-4 py-2 rounded-full text-sm font-bold">
+                                    🔴 LIVE AUCTION
+                                </div>
+                                <div class="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-4 py-2 rounded-lg">
+                                    <div class="text-xs opacity-75">Time Remaining</div>
+                                    <div class="countdown-timer text-lg font-bold">05:42:18</div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-2xl font-crimson font-bold text-basalt-black mb-2">Eco Safari Lodge</h3>
+                                        <p class="text-mountain-gray flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Serengeti National Park
+                                        </p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm text-mountain-gray mb-1">Current Bid</div>
+                                        <div class="text-3xl font-bold text-savanna-gold">₦ 1,800,000,000</div>
+                                        <div class="text-sm text-sundown-orange">8 bids • 22 watchers</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-4 gap-4 mb-6 text-sm">
+                                    <div class="text-center">
+                                        <div class="font-semibold text-basalt-black">12</div>
+                                        <div class="text-mountain-gray">Suites</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold text-basalt-black">500</div>
+                                        <div class="text-mountain-gray">Sq Meters</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold text-basalt-black">Pool</div>
+                                        <div class="text-mountain-gray">Amenity</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold text-basalt-black">Wildlife</div>
+                                        <div class="text-mountain-gray">View</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Bidding Interface -->
+                                <div class="bg-safari-beige rounded-lg p-4 mb-4">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <span class="font-semibold text-basalt-black">Place Your Bid</span>
+                                        <span class="text-sm text-mountain-gray">Min bid: ₦ 1,801,000,000</span>
+                                    </div>
+                                    <div class="flex space-x-4">
+                                        <input type="number" class="bid-input flex-1 p-3 rounded-lg text-lg font-semibold" placeholder="₦ 1,801,000,000" min="1801000000" step="1000000">
+                                        <button class="bid-button text-white px-8 py-3 rounded-lg font-semibold">
+                                            Place Bid
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar -->
+                <div class="space-y-8">
+                    <!-- My Bidding Activity -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-4">My Bidding Activity</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-safari-beige rounded-lg">
+                                <div>
+                                    <div class="font-semibold text-sm">Oceanfront Villa</div>
+                                    <div class="text-xs text-mountain-gray">Current bid: $285,000</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sundown-orange text-sm font-semibold">Outbid</div>
+                                    <div class="text-xs text-mountain-gray">02:15:30</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-safari-beige rounded-lg">
+                                <div>
+                                    <div class="font-semibold text-sm">Safari Lodge</div>
+                                    <div class="text-xs text-mountain-gray">Your bid: $450,000</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-savanna-gold text-sm font-semibold">Leading</div>
+                                    <div class="text-xs text-mountain-gray">05:42:18</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="w-full mt-4 bg-ocean-teal text-white py-2 rounded-lg font-semibold hover:bg-savanna-gold transition-colors duration-300">
+                            View All Activity
+                        </button>
+                    </div>
+                    
+                    <!-- Bid History -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-4">Recent Bids</h3>
+                        <div class="space-y-3 max-h-64 overflow-y-auto">
+                            <div class="bid-history-item p-3 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-sm">Bidder #8472</span>
+                                    <span class="text-savanna-gold font-bold">$285,000</span>
+                                </div>
+                                <div class="text-xs text-mountain-gray">2 minutes ago</div>
+                            </div>
+                            
+                            <div class="bid-history-item p-3 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-sm">Bidder #3921</span>
+                                    <span class="text-savanna-gold font-bold">$284,000</span>
+                                </div>
+                                <div class="text-xs text-mountain-gray">5 minutes ago</div>
+                            </div>
+                            
+                            <div class="bid-history-item p-3 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-sm">Bidder #8472</span>
+                                    <span class="text-savanna-gold font-bold">$283,000</span>
+                                </div>
+                                <div class="text-xs text-mountain-gray">8 minutes ago</div>
+                            </div>
+                            
+                            <div class="bid-history-item p-3 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-sm">Bidder #5628</span>
+                                    <span class="text-savanna-gold font-bold">$282,000</span>
+                                </div>
+                                <div class="text-xs text-mountain-gray">12 minutes ago</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Watchlist -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-4">My Watchlist</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3 p-2 hover:bg-safari-beige rounded-lg cursor-pointer">
+                                <img src="https://kimi-web-img.moonshot.cn/img/i.ytimg.com/1bfb13b8eeacc8618f57467169fea7bf5592da0a.jpg" alt="Modern Apartment" class="w-12 h-12 object-cover rounded-lg">
+                                <div class="flex-1">
+                                    <div class="font-semibold text-sm">Modern Apartment</div>
+                                    <div class="text-xs text-mountain-gray">Upanga, Dar es Salaam</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-savanna-gold font-bold text-sm">₦ 720,000,000</div>
+                                    <div class="text-xs text-sundown-orange">01:28:45</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3 p-2 hover:bg-safari-beige rounded-lg cursor-pointer">
+                                <img src="https://kimi-web-img.moonshot.cn/img/my-beach.com/b16e89283f3f30c308bf3e54a31c8effcadca667.jpg" alt="Beach Villa" class="w-12 h-12 object-cover rounded-lg">
+                                <div class="flex-1">
+                                    <div class="font-semibold text-sm">Beachfront Villa</div>
+                                    <div class="text-xs text-mountain-gray">Nungwi, Zanzibar</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-savanna-gold font-bold text-sm">₦ 1,200,000,000</div>
+                                    <div class="text-xs text-ocean-teal">Starts in 3 days</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="w-full mt-4 bg-gray-200 text-basalt-black py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors duration-300">
+                            Manage Watchlist
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auction Calendar -->
+    <section class="py-16 bg-safari-beige">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-crimson font-bold text-basalt-black mb-4">Auction Calendar</h2>
+                <p class="text-xl text-mountain-gray max-w-3xl mx-auto">Upcoming auctions and important dates for premium Tanzanian properties.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Calendar Item 1 -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-savanna-gold">15</div>
+                            <div class="text-sm text-mountain-gray">DEC 2025</div>
+                        </div>
+                        <div class="bg-sundown-orange text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            LIVE NOW
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-crimson font-bold text-basalt-black mb-2">Premium Properties Auction</h3>
+                    <p class="text-mountain-gray text-sm mb-4">Luxury villas and safari lodges from across Tanzania</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-mountain-gray">3 properties</span>
+                        <span class="text-sm font-semibold text-savanna-gold">Starting from ₦ 720M</span>
+                    </div>
+                </div>
+                
+                <!-- Calendar Item 2 -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-ocean-teal">18</div>
+                            <div class="text-sm text-mountain-gray">DEC 2025</div>
+                        </div>
+                        <div class="bg-ocean-teal text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            UPCOMING
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-crimson font-bold text-basalt-black mb-2">Coastal Properties Auction</h3>
+                    <p class="text-mountain-gray text-sm mb-4">Beachfront villas and coastal developments</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-mountain-gray">5 properties</span>
+                        <span class="text-sm font-semibold text-savanna-gold">Starting from ₦ 1B</span>
+                    </div>
+                </div>
+                
+                <!-- Calendar Item 3 -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-savanna-gold">22</div>
+                            <div class="text-sm text-mountain-gray">DEC 2025</div>
+                        </div>
+                        <div class="bg-gray-400 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            SCHEDULED
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-crimson font-bold text-basalt-black mb-2">Safari Lodge Special</h3>
+                    <p class="text-mountain-gray text-sm mb-4">Eco-tourism investment opportunities</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-mountain-gray">2 properties</span>
+                        <span class="text-sm font-semibold text-savanna-gold">Starting from ₦ 1.6B</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-basalt-black text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-crimson font-bold text-savanna-gold mb-4">Tanzania Auctions</h3>
+                    <p class="text-gray-300 mb-4">Premium real estate auction platform connecting investors with exceptional Tanzanian properties.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="properties.html" class="text-gray-300 hover:text-savanna-gold transition-colors">Properties</a></li>
+                        <li><a href="auctions.html" class="text-gray-300 hover:text-savanna-gold transition-colors">Live Auctions</a></li>
+                        <li><a href="about.html" class="text-gray-300 hover:text-savanna-gold transition-colors">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Property Types</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-300">Luxury Villas</li>
+                        <li class="text-gray-300">Safari Lodges</li>
+                        <li class="text-gray-300">Apartments</li>
+                        <li class="text-gray-300">Commercial</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>Dar es Salaam, Tanzania</li>
+                        <li>+255 22 292 0000</li>
+                        <li>info@tanzaniaauctions.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Tanzania Real Estate Auctions. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>

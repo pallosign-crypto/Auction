@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Tanzania Auctions - Market Leaders in Real Estate</title>
+    <meta name="description" content="Learn about Tanzania Real Estate Auctions' expertise, market leadership, and commitment to transparent property transactions across East Africa.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'savanna-gold': '#D4A574',
+                        'ocean-teal': '#2C7A7B',
+                        'basalt-black': '#1A202C',
+                        'sundown-orange': '#DD6B20',
+                        'safari-beige': '#F7FAFC',
+                        'mountain-gray': '#4A5568'
+                    },
+                    fontFamily: {
+                        'crimson': ['Crimson Pro', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .pattern-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4A574' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .reveal-text {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .reveal-text.revealed {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .team-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(44, 122, 123, 0.1), rgba(212, 165, 116, 0.1));
+            border: 1px solid rgba(44, 122, 123, 0.2);
+        }
+        
+        .chart-container {
+            height: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-safari-beige text-basalt-black font-inter pattern-bg">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-morphism">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="index.html" class="text-2xl font-crimson font-bold text-gradient">Tanzania Auctions</a>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-basalt-black hover:text-savanna-gold transition-colors duration-300 font-medium">Home</a>
+                        <a href="properties.html" class="text-basalt-black hover:text-savanna-gold transition-colors duration-300 font-medium">Properties</a>
+                        <a href="auctions.html" class="text-basalt-black hover:text-savanna-gold transition-colors duration-300 font-medium">Live Auctions</a>
+                        <a href="about.html" class="text-savanna-gold font-semibold">About</a>
+                        <a href="login.html" class="bg-savanna-gold text-white px-6 py-2 rounded-lg hover:bg-sundown-orange transition-colors duration-300 font-semibold">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 bg-gradient-to-br from-ocean-teal to-savanna-gold">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-white">
+                <h1 class="text-4xl md:text-6xl font-playfair font-bold mb-6 reveal-text">About Tanzania Auctions</h1>
+                <p class="text-xl md:text-2xl max-w-4xl mx-auto reveal-text">Leading the transformation of real estate transactions across East Africa through transparent, professional, and innovative auction services.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Company Story -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal-text">
+                    <h2 class="text-4xl font-crimson font-bold text-basalt-black mb-6">Our Story</h2>
+                    <div class="space-y-6 text-lg text-mountain-gray leading-relaxed">
+                        <p>Founded in 2018, Tanzania Real Estate Auctions emerged from a vision to revolutionize property transactions across East Africa. We recognized the need for a transparent, efficient, and professional platform that could connect premium Tanzanian properties with global investors.</p>
+                        
+                        <p>Our journey began with a simple belief: every property transaction should be conducted with the highest standards of integrity and transparency. Today, we are proud to be the leading auction platform for premium real estate in Tanzania, facilitating millions of dollars in property transactions annually.</p>
+                        
+                        <p>We combine deep local market knowledge with international best practices, ensuring that every auction is conducted professionally and every transaction is seamless. Our team of experienced real estate professionals, auctioneers, and legal experts work tirelessly to provide exceptional service to both buyers and sellers.</p>
+                    </div>
+                </div>
+                
+                <div class="reveal-text">
+                    <img src="resources/hero-auction-room.png" alt="Professional Auction Room" class="w-full rounded-xl shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Statistics -->
+    <section class="py-16 bg-gradient-to-br from-safari-beige to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-crimson font-bold text-basalt-black mb-4 reveal-text">Our Impact</h2>
+                <p class="text-xl text-mountain-gray max-w-3xl mx-auto reveal-text">Numbers that demonstrate our commitment to excellence and market leadership.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="stat-card rounded-xl p-8 text-center">
+                    <div class="text-4xl md:text-5xl font-bold text-savanna-gold mb-2" data-counter="850">0</div>
+                    <div class="text-lg font-semibold text-basalt-black mb-2">Properties Sold</div>
+                    <div class="text-sm text-mountain-gray">Successful auctions completed</div>
+                </div>
+                
+                <div class="stat-card rounded-xl p-8 text-center">
+                    <div class="text-4xl md:text-5xl font-bold text-ocean-teal mb-2">$<span data-counter="125">0</span>M</div>
+                    <div class="text-lg font-semibold text-basalt-black mb-2">Transaction Value</div>
+                    <div class="text-sm text-mountain-gray">Total property value sold</div>
+                </div>
+                
+                <div class="stat-card rounded-xl p-8 text-center">
+                    <div class="text-4xl md:text-5xl font-bold text-sundown-orange mb-2" data-counter="98">0</div>
+                    <div class="text-lg font-semibold text-basalt-black mb-2">Client Satisfaction</div>
+                    <div class="text-sm text-mountain-gray">Percentage of happy clients</div>
+                </div>
+                
+                <div class="stat-card rounded-xl p-8 text-center">
+                    <div class="text-4xl md:text-5xl font-bold text-savanna-gold mb-2" data-counter="7">0</div>
+                    <div class="text-lg font-semibold text-basalt-black mb-2">Years Experience</div>
+                    <div class="text-sm text-mountain-gray">In Tanzanian real estate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Analysis -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-crimson font-bold text-basalt-black mb-4 reveal-text">Tanzania Real Estate Market Analysis</h2>
+                <p class="text-xl text-mountain-gray max-w-3xl mx-auto reveal-text">Comprehensive insights into market trends, investment opportunities, and growth projections.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="reveal-text">
+                    <h3 class="text-2xl font-crimson font-bold text-basalt-black mb-6">Market Performance</h3>
+                    <div class="chart-container" id="marketChart"></div>
+                </div>
+                
+                <div class="reveal-text">
+                    <h3 class="text-2xl font-crimson font-bold text-basalt-black mb-6">Investment Opportunities</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-savanna-gold rounded-full flex items-center justify-center mr-4 mt-1">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-basalt-black mb-2">Dar es Salaam Premium Districts</h4>
+                                <p class="text-mountain-gray">Masaki, Oyster Bay, and Msasani continue to show strong appreciation with 6-9% rental yields and consistent demand from expatriates and diplomats.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-ocean-teal rounded-full flex items-center justify-center mr-4 mt-1">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-basalt-black mb-2">Safari Tourism Properties</h4>
+                                <p class="text-mountain-gray">Serengeti and Ngorongoro regions offer exceptional returns for eco-lodges and safari camps, with tourism growth driving 20% annual sector expansion.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-sundown-orange rounded-full flex items-center justify-center mr-4 mt-1">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-basalt-black mb-2">Emerging Markets</h4>
+                                <p class="text-mountain-gray">Kigamboni, Arusha, and Mwanza present significant growth potential with infrastructure development and increasing foreign investment.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Legal Framework -->
+    <section class="py-20 bg-gradient-to-br from-safari-beige to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-crimson font-bold text-basalt-black mb-4 reveal-text">Legal Framework & Foreign Investment</h2>
+                <p class="text-xl text-mountain-gray max-w-3xl mx-auto reveal-text">Understanding Tanzanian property laws and foreign ownership regulations.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-8 reveal-text">
+                    <div class="w-16 h-16 bg-savanna-gold rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-crimson font-bold text-basalt-black mb-4">Property Ownership</h3>
+                    <p class="text-mountain-gray mb-4">All land in Tanzania is publicly owned and vested in the President as trustee for citizens. Foreigners can acquire long-term leaseholds through derivative rights.</p>
+                    <ul class="text-sm text-mountain-gray space-y-2">
+                        <li>• 33, 66, or 99-year lease terms available</li>
+                        <li>• Foreign ownership limit: 70% in apartment buildings</li>
+                        <li>• TIC approval required for large investments</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8 reveal-text">
+                    <div class="w-16 h-16 bg-ocean-teal rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-crimson font-bold text-basalt-black mb-4">Investment Process</h3>
+                    <p class="text-mountain-gray mb-4">Our streamlined process ensures compliance with all legal requirements while maximizing investment potential.</p>
+                    <ul class="text-sm text-mountain-gray space-y-2">
+                        <li>• Due diligence and title verification</li>
+                        <li>• Legal documentation preparation</li>
+                        <li>• Registration and transfer facilitation</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8 reveal-text">
+                    <div class="w-16 h-16 bg-sundown-orange rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-crimson font-bold text-basalt-black mb-4">Tax & Fees</h3>
+                    <p class="text-mountain-gray mb-4">Transparent fee structure with no hidden costs. All statutory charges clearly outlined.</p>
+                    <ul class="text-sm text-mountain-gray space-y-2">
+                        <li>• Stamp Duty: 1% of property value</li>
+                        <li>• Registration Fees: 0.25%</li>
+                        <li>• Legal fees: 3-10% (negotiable)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-crimson font-bold text-basalt-black mb-4 reveal-text">Our Expert Team</h2>
+                <p class="text-xl text-mountain-gray max-w-3xl mx-auto reveal-text">Experienced professionals dedicated to excellence in real estate auction services.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-savanna-gold to-sundown-orange"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-2">Grace Makoye</h3>
+                        <p class="text-savanna-gold font-semibold mb-3">Managing Director</p>
+                        <p class="text-mountain-gray text-sm mb-4">15+ years in Tanzanian real estate with expertise in luxury properties and safari lodge development. Former VP at Knight Frank Tanzania.</p>
+                        <div class="flex space-x-3">
+                            <button class="text-ocean-teal hover:text-savanna-gold transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                            <button class="text-ocean-teal hover:text-savanna-gold transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-ocean-teal to-savanna-gold"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-2">David Mwakalinga</h3>
+                        <p class="text-ocean-teal font-semibold mb-3">Legal Director</p>
+                        <p class="text-mountain-gray text-sm mb-4">Specialized in property law and conveyancing with 12+ years experience. Ensures all transactions comply with Tanzanian legal framework.</p>
+                        <div class="flex space-x-3">
+                            <button class="text-ocean-teal hover:text-savanna-gold transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                            <button class="text-ocean-teal hover:text-savanna-gold transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 016.29 1.84"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-sundown-orange to-ocean-teal"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-2">Amina Kombo</h3>
+                        <p class="text-sundown-orange font-semibold mb-3">Auction Manager</p>
+                        <p class="text-mountain-gray text-sm mb-4">Certified auctioneer with 10+ years experience in luxury property auctions. Specializes in safari lodges and coastal properties.</p>
+                        <div class="flex space-x-3">
+                            <button class="text-ocean-teal hover:text-savanna-gold transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                            <button class="text-ocean-teal hover:text-savanna-gold transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 016.29 1.84"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-20 bg-gradient-to-br from-ocean-teal to-savanna-gold">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-white mb-16">
+                <h2 class="text-4xl font-crimson font-bold mb-4 reveal-text">Get in Touch</h2>
+                <p class="text-xl max-w-3xl mx-auto reveal-text">Ready to explore premium real estate opportunities in Tanzania? Our team is here to assist you.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="reveal-text">
+                    <h3 class="text-2xl font-crimson font-bold mb-6">Contact Information</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Office Address</div>
+                                <div class="text-white text-opacity-90">Golden Tulip Building, 8th Floor<br>P.O. Box 1234, Dar es Salaam, Tanzania</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Phone Numbers</div>
+                                <div class="text-white text-opacity-90">+255 22 292 0000<br>+255 754 123 456</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Email Addresses</div>
+                                <div class="text-white text-opacity-90">info@tanzaniaauctions.com<br>auctions@tanzaniaauctions.com</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal-text">
+                    <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-8">
+                        <h3 class="text-2xl font-crimson font-bold text-white mb-6">Send us a Message</h3>
+                        <form class="space-y-6">
+                            <div>
+                                <label class="block text-white font-semibold mb-2">Full Name</label>
+                                <input type="text" class="w-full p-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50" placeholder="Your full name">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-white font-semibold mb-2">Email Address</label>
+                                <input type="email" class="w-full p-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50" placeholder="your.email@example.com">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-white font-semibold mb-2">Inquiry Type</label>
+                                <select class="w-full p-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50">
+                                    <option value="">Select inquiry type</option>
+                                    <option value="buying">Buying Property</option>
+                                    <option value="selling">Selling Property</option>
+                                    <option value="auction">Auction Participation</option>
+                                    <option value="investment">Investment Consultation</option>
+                                    <option value="general">General Information</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-white font-semibold mb-2">Message</label>
+                                <textarea rows="4" class="w-full p-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50" placeholder="Tell us about your real estate needs..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-savanna-gold text-white py-3 rounded-lg font-semibold hover:bg-sundown-orange transition-colors duration-300">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-basalt-black text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-crimson font-bold text-savanna-gold mb-4">Tanzania Auctions</h3>
+                    <p class="text-gray-300 mb-4">Premium real estate auction platform connecting investors with exceptional Tanzanian properties.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="properties.html" class="text-gray-300 hover:text-savanna-gold transition-colors">Properties</a></li>
+                        <li><a href="auctions.html" class="text-gray-300 hover:text-savanna-gold transition-colors">Live Auctions</a></li>
+                        <li><a href="about.html" class="text-gray-300 hover:text-savanna-gold transition-colors">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Property Types</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-300">Luxury Villas</li>
+                        <li class="text-gray-300">Safari Lodges</li>
+                        <li class="text-gray-300">Apartments</li>
+                        <li class="text-gray-300">Commercial</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>Dar es Salaam, Tanzania</li>
+                        <li>+255 22 292 0000</li>
+                        <li>info@tanzaniaauctions.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Tanzania Real Estate Auctions. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

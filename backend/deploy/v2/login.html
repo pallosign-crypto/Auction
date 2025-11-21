@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Tanzania Real Estate Auctions</title>
+    <meta name="description" content="Login to your Tanzania Real Estate Auctions account to bid on premium properties.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'savanna-gold': '#D4A574',
+                        'ocean-teal': '#2C7A7B',
+                        'basalt-black': '#1A202C',
+                        'sundown-orange': '#DD6B20',
+                        'safari-beige': '#F7FAFC',
+                        'mountain-gray': '#4A5568'
+                    },
+                    fontFamily: {
+                        'crimson': ['Crimson Pro', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .login-gradient {
+            background: linear-gradient(135deg, #2C7A7B 0%, #D4A574 50%, #DD6B20 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .login-input {
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .login-input:focus {
+            border-color: #D4A574;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+        
+        .social-login {
+            transition: all 0.3s ease;
+        }
+        
+        .social-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+
+<body class="login-gradient min-h-screen flex items-center justify-center p-4">
+    <div class="login-card rounded-2xl p-8 w-full max-w-md">
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-savanna-gold to-sundown-orange rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-crimson font-bold text-basalt-black mb-2">Welcome Back</h1>
+            <p class="text-mountain-gray">Sign in to your auction account</p>
+        </div>
+        
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-semibold text-basalt-black mb-2">Username or Email</label>
+                <input 
+                    type="text" 
+                    name="username" 
+                    id="username" 
+                    class="login-input w-full p-3 rounded-lg focus:outline-none" 
+                    placeholder="Enter your username or email"
+                    required
+                >
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-basalt-black mb-2">Password</label>
+                <input 
+                    type="password" 
+                    name="password" 
+                    id="password" 
+                    class="login-input w-full p-3 rounded-lg focus:outline-none" 
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <label class="flex items-center">
+                    <input type="checkbox" name="rememberMe" class="mr-2">
+                    <span class="text-sm text-mountain-gray">Remember me</span>
+                </label>
+                <a href="#" class="text-sm text-ocean-teal hover:text-savanna-gold" id="forgotPasswordLink">Forgot password?</a>
+            </div>
+            
+            <button 
+                type="submit" 
+                class="w-full bg-savanna-gold text-white py-3 rounded-lg font-semibold hover:bg-sundown-orange transition-colors duration-300"
+            >
+                Sign In
+            </button>
+        </form>
+        
+        <div class="mt-6">
+            <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-white text-mountain-gray">Or continue with</span>
+                </div>
+            </div>
+            
+            <div class="mt-6 grid grid-cols-2 gap-3">
+                <button class="social-login w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-mountain-gray hover:bg-gray-50">
+                    <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Google
+                </button>
+                
+                <button class="social-login w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-mountain-gray hover:bg-gray-50">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                    </svg>
+                    Twitter
+                </button>
+            </div>
+        </div>
+        
+        <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+            <p class="text-mountain-gray">Don't have an account? 
+                <a href="register.html" class="text-ocean-teal hover:text-savanna-gold font-semibold">Sign Up</a>
+            </p>
+        </div>
+        
+        <div class="mt-4 text-center">
+            <p class="text-sm text-mountain-gray">
+                <a href="admin-login.html" class="text-sundown-orange hover:text-red-600">Admin Login</a>
+            </p>
+        </div>
+    </div>
+    
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-sundown-orange rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-crimson font-bold text-basalt-black mb-2">Reset Password</h3>
+                <p class="text-mountain-gray">Enter your email address and we'll send you instructions to reset your password.</p>
+            </div>
+            
+            <form id="forgotPasswordForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-basalt-black mb-2">Email Address</label>
+                    <input type="email" name="resetEmail" class="login-input w-full p-3 rounded-lg focus:outline-none" placeholder="Enter your email address" required>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button type="button" id="closeForgotPassword" class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-savanna-gold text-white py-3 rounded-lg font-semibold hover:bg-sundown-orange transition-colors">
+                        Send Instructions
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        class LoginSystem {
+            constructor() {
+                this.init();
+            }
+            
+            init() {
+                this.setupFormSubmission();
+                this.setupForgotPassword();
+                this.setupSocialLogin();
+                this.loadDemoUsers();
+            }
+            
+            setupFormSubmission() {
+                document.getElementById('loginForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleLogin();
+                });
+            }
+            
+            handleLogin() {
+                const formData = new FormData(document.getElementById('loginForm'));
+                const username = formData.get('username');
+                const password = formData.get('password');
+                const rememberMe = formData.get('rememberMe');
+                
+                // Demo credentials
+                const demoUsers = {
+                    'demo@buyer.com': { password: 'buyer123', role: 'buyer', name: 'Demo Buyer' },
+                    'demo@seller.com': { password: 'seller123', role: 'seller', name: 'Demo Seller' },
+                    'demo@admin.com': { password: 'admin123', role: 'admin', name: 'Demo Admin' },
+                    'johndoe': { password: 'password123', role: 'buyer', name: 'John Doe' },
+                    'janesmith': { password: 'password123', role: 'seller', name: 'Jane Smith' }
+                };
+                
+                const user = demoUsers[username];
+                
+                if (user && user.password === password) {
+                    // Create session
+                    const sessionData = {
+                        username: username,
+                        name: user.name,
+                        role: user.role,
+                        loginTime: new Date().toISOString(),
+                        rememberMe: rememberMe === 'on'
+                    };
+                    
+                    localStorage.setItem('userSession', JSON.stringify(sessionData));
+                    
+                    // Show success message and redirect
+                    this.showSuccessMessage('Login successful! Redirecting to your dashboard...');
+                    
+                    setTimeout(() => {
+                        if (user.role === 'admin') {
+                            window.location.href = 'admin-dashboard.html';
+                        } else {
+                            window.location.href = 'auctions.html';
+                        }
+                    }, 1500);
+                } else {
+                    this.showErrorMessage('Invalid username or password. Please try again.');
+                }
+            }
+            
+            setupForgotPassword() {
+                const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+                const modal = document.getElementById('forgotPasswordModal');
+                const closeBtn = document.getElementById('closeForgotPassword');
+                const form = document.getElementById('forgotPasswordForm');
+                
+                forgotPasswordLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    modal.classList.remove('hidden');
+                });
+                
+                closeBtn.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                });
+                
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+                
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const email = form.querySelector('input[name="resetEmail"]').value;
+                    
+                    // Simulate password reset
+                    this.showSuccessMessage(`Password reset instructions have been sent to ${email}`);
+                    modal.classList.add('hidden');
+                    form.reset();
+                });
+            }
+            
+            setupSocialLogin() {
+                document.querySelectorAll('.social-login').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.showInfoMessage('Social login feature coming soon!');
+                    });
+                });
+            }
+            
+            loadDemoUsers() {
+                // Store demo users for reference
+                const demoUsersInfo = {
+                    'demo@buyer.com': { name: 'Demo Buyer', role: 'Property Buyer' },
+                    'demo@seller.com': { name: 'Demo Seller', role: 'Property Seller' },
+                    'demo@admin.com': { name: 'Demo Admin', role: 'Administrator' },
+                    'johndoe': { name: 'John Doe', role: 'Verified Bidder' },
+                    'janesmith': { name: 'Jane Smith', role: 'Premium Seller' }
+                };
+                
+                localStorage.setItem('demoUsers', JSON.stringify(demoUsersInfo));
+            }
+            
+            showSuccessMessage(message) {
+                this.showMessage(message, 'success');
+            }
+            
+            showErrorMessage(message) {
+                this.showMessage(message, 'error');
+            }
+            
+            showInfoMessage(message) {
+                this.showMessage(message, 'info');
+            }
+            
+            showMessage(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `fixed top-20 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform translate-x-full transition-transform duration-300`;
+                
+                if (type === 'success') {
+                    notification.classList.add('bg-green-500', 'text-white');
+                } else if (type === 'error') {
+                    notification.classList.add('bg-red-500', 'text-white');
+                } else {
+                    notification.classList.add('bg-ocean-teal', 'text-white');
+                }
+                
+                notification.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span>${message}</span>
+                        <button class="ml-4 text-white hover:text-gray-200">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Animate in
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-full');
+                }, 100);
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }, 5000);
+                
+                // Manual close
+                notification.querySelector('button').addEventListener('click', () => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                });
+            }
+        }
+        
+        // Initialize login system
+        document.addEventListener('DOMContentLoaded', () => {
+            new LoginSystem();
+        });
+    </script>
+</body>
+</html>

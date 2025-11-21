@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Tanzania Real Estate Auctions</title>
+    <meta name="description" content="Register as a bidder to participate in premium Tanzanian real estate auctions.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'savanna-gold': '#D4A574',
+                        'ocean-teal': '#2C7A7B',
+                        'basalt-black': '#1A202C',
+                        'sundown-orange': '#DD6B20',
+                        'safari-beige': '#F7FAFC',
+                        'mountain-gray': '#4A5568'
+                    },
+                    fontFamily: {
+                        'crimson': ['Crimson Pro', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .register-gradient {
+            background: linear-gradient(135deg, #2C7A7B 0%, #D4A574 50%, #DD6B20 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .register-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .register-input {
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .register-input:focus {
+            border-color: #D4A574;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+        
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        
+        .step-indicator.active {
+            background: #D4A574;
+            color: white;
+        }
+        
+        .step-indicator.completed {
+            background: #2C7A7B;
+            color: white;
+        }
+        
+        .form-step {
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="register-gradient min-h-screen flex items-center justify-center p-4">
+    <div class="register-card rounded-2xl p-8 w-full max-w-4xl">
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-savanna-gold to-sundown-orange rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-crimson font-bold text-basalt-black mb-2">Create Your Account</h1>
+            <p class="text-mountain-gray">Join Tanzania's premier real estate auction platform</p>
+        </div>
+        
+        <!-- Step Indicators -->
+        <div class="flex justify-center mb-8">
+            <div class="flex items-center space-x-4">
+                <div class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm" data-step="1">1</div>
+                <div class="w-16 h-1 bg-gray-300"></div>
+                <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-gray-300 text-gray-600" data-step="2">2</div>
+                <div class="w-16 h-1 bg-gray-300"></div>
+                <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-gray-300 text-gray-600" data-step="3">3</div>
+            </div>
+        </div>
+        
+        <form id="registrationForm" class="space-y-6">
+            <!-- Step 1: Personal Information -->
+            <div class="form-step active" data-step="1">
+                <h2 class="text-xl font-crimson font-bold text-basalt-black mb-6">Personal Information</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">First Name *</label>
+                        <input type="text" name="firstName" class="register-input w-full p-3 rounded-lg focus:outline-none" placeholder="Enter your first name" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Last Name *</label>
+                        <input type="text" name="lastName" class="register-input w-full p-3 rounded-lg focus:outline-none" placeholder="Enter your last name" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Email Address *</label>
+                        <input type="email" name="email" class="register-input w-full p-3 rounded-lg focus:outline-none" placeholder="Enter your email address" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Phone Number *</label>
+                        <input type="tel" name="phone" class="register-input w-full p-3 rounded-lg focus:outline-none" placeholder="+255 7XX XXX XXX" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Date of Birth *</label>
+                        <input type="date" name="dateOfBirth" class="register-input w-full p-3 rounded-lg focus:outline-none" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Nationality *</label>
+                        <select name="nationality" class="register-input w-full p-3 rounded-lg focus:outline-none" required>
+                            <option value="">Select nationality</option>
+                            <option value="TZ">Tanzanian</option>
+                            <option value="KE">Kenyan</option>
+                            <option value="UG">Ugandan</option>
+                            <option value="RW">Rwandan</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mt-8 flex justify-end">
+                    <button type="button" class="next-step bg-savanna-gold text-white px-8 py-3 rounded-lg font-semibold hover:bg-sundown-orange transition-colors">
+                        Next Step
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Account Setup -->
+            <div class="form-step" data-step="2">
+                <h2 class="text-xl font-crimson font-bold text-basalt-black mb-6">Account Setup</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Username *</label>
+                        <input type="text" name="username" class="register-input w-full p-3 rounded-lg focus:outline-none" placeholder="Choose a username" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Account Type *</label>
+                        <select name="accountType" class="register-input w-full p-3 rounded-lg focus:outline-none" required>
+                            <option value="">Select account type</option>
+                            <option value="bidder">Bidder (Buy Properties)</option>
+                            <option value="seller">Seller (List Properties)</option>
+                            <option value="both">Both (Bid & Sell)</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Password *</label>
+                        <input type="password" name="password" id="password" class="register-input w-full p-3 rounded-lg focus:outline-none" placeholder="Create a strong password" required>
+                        <p class="text-mountain-gray text-xs mt-1">Minimum 8 characters, include uppercase, lowercase, and number</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Confirm Password *</label>
+                        <input type="password" name="confirmPassword" id="confirmPassword" class="register-input w-full p-3 rounded-lg focus:outline-none" placeholder="Confirm your password" required>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <label class="flex items-start">
+                        <input type="checkbox" name="terms" class="mt-1 mr-3" required>
+                        <span class="text-sm text-mountain-gray">
+                            I agree to the <a href="#" class="text-ocean-teal hover:text-savanna-gold">Terms of Service</a> and 
+                            <a href="#" class="text-ocean-teal hover:text-savanna-gold">Privacy Policy</a>
+                        </span>
+                    </label>
+                </div>
+                
+                <div class="mt-6">
+                    <label class="flex items-start">
+                        <input type="checkbox" name="newsletter" class="mt-1 mr-3">
+                        <span class="text-sm text-mountain-gray">
+                            I want to receive updates about new properties and auction notifications
+                        </span>
+                    </label>
+                </div>
+                
+                <div class="mt-8 flex justify-between">
+                    <button type="button" class="prev-step bg-gray-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">
+                        Previous
+                    </button>
+                    <button type="button" class="next-step bg-savanna-gold text-white px-8 py-3 rounded-lg font-semibold hover:bg-sundown-orange transition-colors">
+                        Next Step
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Verification & Preferences -->
+            <div class="form-step" data-step="3">
+                <h2 class="text-xl font-crimson font-bold text-basalt-black mb-6">Verification & Preferences</h2>
+                
+                <div class="bg-safari-beige p-6 rounded-lg mb-6">
+                    <h3 class="font-semibold text-basalt-black mb-4">Identity Verification</h3>
+                    <p class="text-mountain-gray text-sm mb-4">To participate in auctions, you need to verify your identity. Please upload the following documents:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-basalt-black mb-2">National ID/Passport *</label>
+                            <input type="file" name="idDocument" accept=".pdf,.jpg,.png" class="register-input w-full p-3 rounded-lg focus:outline-none" required>
+                            <p class="text-mountain-gray text-xs mt-1">Upload clear photo or scan of your ID</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-basalt-black mb-2">Proof of Address *</label>
+                            <input type="file" name="addressProof" accept=".pdf,.jpg,.png" class="register-input w-full p-3 rounded-lg focus:outline-none" required>
+                            <p class="text-mountain-gray text-xs mt-1">Utility bill or bank statement (last 3 months)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Investment Budget Range</label>
+                        <select name="budgetRange" class="register-input w-full p-3 rounded-lg focus:outline-none">
+                            <option value="">Select budget range</option>
+                            <option value="0-100m">₦ 0 - ₦ 100 Million</option>
+                            <option value="100m-500m">₦ 100M - ₦ 500 Million</option>
+                            <option value="500m-1b">₦ 500M - ₦ 1 Billion</option>
+                            <option value="1b+">₦ 1 Billion+</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Preferred Property Types</label>
+                        <select name="preferredTypes" multiple class="register-input w-full p-3 rounded-lg focus:outline-none h-24">
+                            <option value="villa">Luxury Villas</option>
+                            <option value="apartment">Apartments</option>
+                            <option value="safari">Safari Lodges</option>
+                            <option value="commercial">Commercial Properties</option>
+                            <option value="land">Land Plots</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Preferred Locations</label>
+                        <select name="preferredLocations" multiple class="register-input w-full p-3 rounded-lg focus:outline-none h-24">
+                            <option value="dar-es-salaam">Dar es Salaam</option>
+                            <option value="arusha">Arusha</option>
+                            <option value="mwanza">Mwanza</option>
+                            <option value="zanzibar">Zanzibar</option>
+                            <option value="serengeti">Serengeti</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-basalt-black mb-2">Referral Code (Optional)</label>
+                        <input type="text" name="referralCode" class="register-input w-full p-3 rounded-lg focus:outline-none" placeholder="Enter referral code if you have one">
+                    </div>
+                </div>
+                
+                <div class="mt-8 flex justify-between">
+                    <button type="button" class="prev-step bg-gray-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">
+                        Previous
+                    </button>
+                    <button type="submit" class="bg-savanna-gold text-white px-8 py-3 rounded-lg font-semibold hover:bg-sundown-orange transition-colors">
+                        Complete Registration
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+        <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+            <p class="text-mountain-gray">Already have an account? 
+                <a href="login.html" class="text-ocean-teal hover:text-savanna-gold font-semibold">Sign In</a>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        class RegistrationForm {
+            constructor() {
+                this.currentStep = 1;
+                this.totalSteps = 3;
+                this.init();
+            }
+            
+            init() {
+                this.setupStepNavigation();
+                this.setupFormValidation();
+                this.setupFormSubmission();
+            }
+            
+            setupStepNavigation() {
+                // Next step buttons
+                document.querySelectorAll('.next-step').forEach(btn => {
+                    btn.addEventListener('click', () => this.nextStep());
+                });
+                
+                // Previous step buttons
+                document.querySelectorAll('.prev-step').forEach(btn => {
+                    btn.addEventListener('click', () => this.prevStep());
+                });
+            }
+            
+            nextStep() {
+                if (this.validateCurrentStep()) {
+                    if (this.currentStep < this.totalSteps) {
+                        this.currentStep++;
+                        this.updateStepDisplay();
+                    }
+                }
+            }
+            
+            prevStep() {
+                if (this.currentStep > 1) {
+                    this.currentStep--;
+                    this.updateStepDisplay();
+                }
+            }
+            
+            updateStepDisplay() {
+                // Update step indicators
+                document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                    const stepNumber = index + 1;
+                    indicator.classList.remove('active', 'completed');
+                    
+                    if (stepNumber < this.currentStep) {
+                        indicator.classList.add('completed');
+                    } else if (stepNumber === this.currentStep) {
+                        indicator.classList.add('active');
+                    }
+                });
+                
+                // Update form steps
+                document.querySelectorAll('.form-step').forEach((step, index) => {
+                    step.classList.remove('active');
+                    if (index + 1 === this.currentStep) {
+                        step.classList.add('active');
+                    }
+                });
+            }
+            
+            validateCurrentStep() {
+                const currentStepElement = document.querySelector(`.form-step[data-step="${this.currentStep}"]`);
+                const requiredFields = currentStepElement.querySelectorAll('[required]');
+                
+                let isValid = true;
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        this.showFieldError(field, 'This field is required');
+                        isValid = false;
+                    } else {
+                        this.clearFieldError(field);
+                    }
+                });
+                
+                // Additional validation for step 2 (passwords)
+                if (this.currentStep === 2) {
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    
+                    if (password !== confirmPassword) {
+                        this.showFieldError(document.getElementById('confirmPassword'), 'Passwords do not match');
+                        isValid = false;
+                    }
+                    
+                    if (password.length < 8) {
+                        this.showFieldError(document.getElementById('password'), 'Password must be at least 8 characters');
+                        isValid = false;
+                    }
+                }
+                
+                return isValid;
+            }
+            
+            showFieldError(field, message) {
+                this.clearFieldError(field);
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'field-error text-red-500 text-sm mt-1';
+                errorDiv.textContent = message;
+                field.parentNode.appendChild(errorDiv);
+                field.classList.add('border-red-500');
+            }
+            
+            clearFieldError(field) {
+                const errorDiv = field.parentNode.querySelector('.field-error');
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+                field.classList.remove('border-red-500');
+            }
+            
+            setupFormValidation() {
+                // Real-time validation
+                const form = document.getElementById('registrationForm');
+                form.addEventListener('input', (e) => {
+                    if (e.target.hasAttribute('required')) {
+                        this.clearFieldError(e.target);
+                    }
+                });
+                
+                // Email validation
+                const emailField = form.querySelector('input[name="email"]');
+                emailField.addEventListener('blur', () => {
+                    if (emailField.value && !this.isValidEmail(emailField.value)) {
+                        this.showFieldError(emailField, 'Please enter a valid email address');
+                    }
+                });
+                
+                // Phone validation
+                const phoneField = form.querySelector('input[name="phone"]');
+                phoneField.addEventListener('blur', () => {
+                    if (phoneField.value && !this.isValidPhone(phoneField.value)) {
+                        this.showFieldError(phoneField, 'Please enter a valid phone number');
+                    }
+                });
+            }
+            
+            isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+            
+            isValidPhone(phone) {
+                const phoneRegex = /^\+?[\d\s-()]+$/;
+                return phoneRegex.test(phone) && phone.length >= 10;
+            }
+            
+            setupFormSubmission() {
+                document.getElementById('registrationForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    if (this.validateCurrentStep()) {
+                        this.submitRegistration();
+                    }
+                });
+            }
+            
+            submitRegistration() {
+                const formData = new FormData(document.getElementById('registrationForm'));
+                const registrationData = Object.fromEntries(formData.entries());
+                
+                // Show loading state
+                const submitBtn = document.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Processing...';
+                submitBtn.disabled = true;
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // Store user data (in real app, this would be sent to server)
+                    const userData = {
+                        ...registrationData,
+                        id: 'U' + Date.now(),
+                        registrationDate: new Date().toISOString(),
+                        status: 'pending',
+                        verificationStatus: 'pending'
+                    };
+                    
+                    localStorage.setItem('pendingRegistration', JSON.stringify(userData));
+                    
+                    // Show success message
+                    this.showSuccessMessage();
+                    
+                    // Reset form
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            }
+            
+            showSuccessMessage() {
+                const successDiv = document.createElement('div');
+                successDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+                successDiv.innerHTML = `
+                    <div class="bg-white rounded-xl p-8 max-w-md w-full text-center">
+                        <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-crimson font-bold text-basalt-black mb-2">Registration Successful!</h3>
+                        <p class="text-mountain-gray mb-6">Your account has been created. Please check your email to verify your account and complete the registration process.</p>
+                        <button class="close-success bg-savanna-gold text-white px-6 py-3 rounded-lg font-semibold hover:bg-sundown-orange transition-colors">
+                            Continue
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(successDiv);
+                
+                successDiv.querySelector('.close-success').addEventListener('click', () => {
+                    document.body.removeChild(successDiv);
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+        
+        // Initialize registration form
+        document.addEventListener('DOMContentLoaded', () => {
+            new RegistrationForm();
+        });
+    </script>
+</body>
+</html>
